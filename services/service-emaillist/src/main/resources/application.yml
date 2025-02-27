@@ -9,17 +9,22 @@ spring:
 
 ---
 # profile: common(default)
-mybatis:
-   config-location: classpath:mybatis/configuration.xml
+#mybatis:
+#   config-location: classpath:mybatis/configuration.xml
+#
+#server:
+#   port: 0
+#   error:
+#      whitelabel:
+#         enabled: false
+#      path: /error
+#   servlet:
+#      context-path: /
 
-server:
-   port: 0
-   error:
-      whitelabel:
-         enabled: false
-      path: /error
-   servlet:
-      context-path: /
+spring:
+   cloud:
+      config:
+         enabled: true
 
 
 ---
@@ -28,36 +33,37 @@ spring:
    config:
       activate:
          on-profile: development
+      import: optional:configserver:http://localhost:7777 # 하위에 관련된 설정을 해당 파일에서 받아 오는 형식으로 진행 (spring cloud config server)
 
-   devtools:
-      restart:
-         enabled: true
-      livereload:
-         enabled: true
-         
-   datasource:
-      driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mariadb://192.168.64.3:3306/webdb?characterEncoding=utf8
-      username: webdb
-      password: webdb
-      hikari:
-         minimum-idle: 10
-         maximum-pool-size: 20    
-
-eureka:
-   instance:
-      preferIpAddress: true
-   client:
-      fetchRegistry: true
-      registerWithEureka: true
-      serviceUrl:
-         defaultZone: http://localhost:8761/eureka
-
-logging:
-   pattern:
-      console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n"
-   level:
-      root: DEBUG
+#   devtools:
+#      restart:
+#         enabled: true
+#      livereload:
+#         enabled: true
+#         
+#   datasource:
+#      driver-class-name: org.mariadb.jdbc.Driver
+#      url: jdbc:mariadb://192.168.64.3:3306/webdb?characterEncoding=utf8
+#      username: webdb
+#      password: webdb
+#      hikari:
+#         minimum-idle: 10
+#         maximum-pool-size: 20    
+#
+#eureka:
+#   instance:
+#      preferIpAddress: true
+#   client:
+#      fetchRegistry: true
+#      registerWithEureka: true
+#      serviceUrl:
+#         defaultZone: http://localhost:8761/eureka
+#
+#logging:
+#   pattern:
+#      console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n"
+#   level:
+#      root: DEBUG
 
 
 ---
@@ -66,36 +72,36 @@ spring:
    config:
       activate:
          on-profile: production
-
-   datasource:
-      driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mariadb://192.168.64.3:3306/webdb?characterEncoding=utf8
-      username: webdb
-      password: webdb
-      hikari:
-         minimum-idle: 10
-         maximum-pool-size: 20 
-
-eureka:
-   instance:
-      preferIpAddress: true
-   client:
-      fetchRegistry: true
-      registerWithEureka: true
-      serviceUrl:
-         defaultZone: http://192.168.64.3:8761/eureka
-
-logging:
-   pattern:
-      file: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n"
-   logback:
-      rollingpolicy:
-         file-name-pattern: "logs/${spring.application.name}.%d{yyyy-MM-dd}.%i.log.zip"
-         max-file-size: 10MB
-         max-history: 10
-   file:
-      name: logs/${spring.application.name}.log
-   level:
-      root: WARN
-      emaillist:
-         exception: ERROR
+      import: optional:configserver:http://192.168.64.3:7777
+#   datasource:
+#      driver-class-name: org.mariadb.jdbc.Driver
+#      url: jdbc:mariadb://192.168.64.3:3306/webdb?characterEncoding=utf8
+#      username: webdb
+#      password: webdb
+#      hikari:
+#         minimum-idle: 10
+#         maximum-pool-size: 20 
+#
+#eureka:
+#   instance:
+#      preferIpAddress: true
+#   client:
+#      fetchRegistry: true
+#      registerWithEureka: true
+#      serviceUrl:
+#         defaultZone: http://192.168.64.3:8761/eureka
+#
+#logging:
+#   pattern:
+#      file: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n"
+#   logback:
+#      rollingpolicy:
+#         file-name-pattern: "logs/${spring.application.name}.%d{yyyy-MM-dd}.%i.log.zip"
+#         max-file-size: 10MB
+#         max-history: 10
+#   file:
+#      name: logs/${spring.application.name}.log
+#   level:
+#      root: WARN
+#      emaillist:
+#         exception: ERROR
